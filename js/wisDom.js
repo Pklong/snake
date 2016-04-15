@@ -36,7 +36,7 @@
 
       if (typeof children === 'object' &&
       !(children instanceof DOMNodeCollection)) {
-        children = root.$l(children);
+        children = root.$w(children);
       }
 
       if (typeof children === 'string') {
@@ -137,7 +137,7 @@
     }
 };
 
-  root.$l = function(arg) {
+  root.$w = function(arg) {
     var wrapper;
 
     if (typeof arg === 'function') {
@@ -155,7 +155,7 @@
     return wrapper;
   };
 
-  root.$l.extend = function(base) {
+  root.$w.extend = function(base) {
     var otherObjs = [].slice.call(arguments, 1);
 
     otherObjs.forEach(function(obj) {
@@ -178,7 +178,7 @@
     return result.substring(0, result.length - 1);
   };
 
-  root.$l.myAjax = function(options) {
+  root.$w.myAjax = function(options) {
     var request = new XMLHttpRequest();
 
     var requestParams = {
@@ -190,7 +190,7 @@
       data: {},
     };
 
-    requestParams = root.$l.extend(requestParams, options);
+    requestParams = root.$w.extend(requestParams, options);
 
     if (options.method.toUpperCase() === 'GET'){
       options.url += "?" + toQueryString(options.data);
