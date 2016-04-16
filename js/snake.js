@@ -6,8 +6,39 @@ var DIRS = {
 };
 
 
-var Board = function() {
-  this.snake = new Snake();
+var Board = function(size) {
+  this.size = size;
+  this.snake = new Snake(this.randomPos());
+  this.addApple();
+};
+
+Board.prototype.randomPos = function() {
+  var x = 1 + Math.floor(Math.random() * (this.height - 2));
+  var y = 1 + Math.floor(Math.random() * (this.width - 2));
+
+  return [x, y];
+};
+
+Board.prototype.addApple = function() {
+  var applePos = this.randomPos();
+  while (this.isOccupied(applePos)) {
+    applePos = this.randomPos();
+  }
+  this.apple = applePos;
+};
+
+Board.prototype.isOccupied = function(pos) {
+  var occupied = this.snake.segments;
+  if (this.apple) {occupied.concat(this.apple);}
+
+  for (var i = 1, n = occupied.length; i < n; i++) {
+    var x = pos[0];
+    var y = pos[1];
+
+    if (x === occupied[i][0] && y === occupied[0][i]) {
+      return true;
+    }
+  }
 };
 
 var Coord = function(x, y) {
@@ -50,3 +81,5 @@ Snake.prototype.turn = function(direction) {
     this.direction = direction;
   }
 };
+
+module.exports = Board;
