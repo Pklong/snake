@@ -79,6 +79,14 @@
       this.html("");
     },
 
+    eq: function (idx) {
+      if (!this.nodes[idx]) {
+        return new DOMNodeCollection([]);
+      } else {
+        return new DOMNodeCollection([this.nodes[idx]]);
+      }
+    },
+
     html: function(html) {
       if (typeof html === 'string') {
         //setter
@@ -93,6 +101,16 @@
           console.error("No nodes present!");
         }
       }
+    },
+    filter: function(selector) {
+      // TODO build out more, works for Snake...
+      var filterNodes = [];
+      this.each(function (node) {
+        if (node.matches(selector)) {
+          filterNodes.push(node);
+        }
+      });
+      return new DOMNodeCollection(filterNodes);
     },
 
     find: function (selector) {

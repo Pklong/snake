@@ -7,10 +7,9 @@ var SNAKE_KEY = {
   40: "S"
 };
 
-var View = function($el, $game) {
-  this.board = new Board(30);
+var View = function($el) {
+  this.board = new Board(20);
   this.$el = $el;
-  this.$game = $game;
 
   this.buildBoard();
   this.render();
@@ -41,6 +40,30 @@ View.prototype.buildBoard = function() {
   }
   this.$el.html(html);
   this.$li = this.$el.find('li');
+};
+
+View.prototype.render = function() {
+  this.updateClasses(this.board.snake.segments, 'snake');
+  this.updateClasses([this.board.apple.pos], 'apple');
+};
+
+View.prototype.step = function() {
+  if (this.board.snake.segments.length > 0) {
+    this.board.snake.move();
+    this.render();
+  } else {
+    this.board.lose();
+    clearInterval(this.intervalHandler);
+  }
+};
+
+View.prototype.updateClasses = function(coords, className) {
+  this.$li.filter('.' + className).removeClass(className);
+
+  coords.forEach(function(coord){
+    var flatCoord = (coord.x * this.board.size) + coord.y;
+    this.$li.eq(flatCoord).addClass(className);
+  }.bind(this));
 };
 
 module.exports = View;
