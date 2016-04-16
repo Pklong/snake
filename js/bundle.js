@@ -114,8 +114,9 @@
 	};
 	
 	View.prototype.reset = function() {
-	  this.$modal.empty();
 	  this.$modal.removeClass('modal');
+	  this.$modal.find('div').removeClass('modal-content');
+	  this.$modal.addClass('game-over');
 	  this.board = new Board(20);
 	  this.buildBoard();
 	  this.inPlay = true;
@@ -134,10 +135,8 @@
 	View.prototype.gameOver = function() {
 	  clearInterval(this.intervalHandler);
 	  this.inPlay = false;
-	
+	  this.$modal.removeClass('game-over');
 	  this.$modal.addClass('modal');
-	  var modalHtml = '<div>Game Over<br><br> Press Enter to play again!</div>';
-	  this.$modal.html(modalHtml);
 	  this.$modal.find('div').addClass('modal-content');
 	};
 	
