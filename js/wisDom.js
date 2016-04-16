@@ -33,7 +33,6 @@
     },
 
     append: function (children) {
-      debugger;
       if (this.nodes.length > 0) { return; }
 
       if (typeof children === 'object' &&
