@@ -1,19 +1,23 @@
 var Board = require('./snake');
 
 var SNAKE_KEY = {
+  //Arrow keys for direction
   38: "N",
   39: "E",
   37: "W",
-  40: "S"
+  40: "S",
 };
 
-var View = function($el) {
+var View = function($el, $modal) {
   this.board = new Board(20);
   this.$el = $el;
+  this.$modal = $modal;
 
   this.buildBoard();
   this.render();
   this.bindKeys();
+
+  this.inPlay = true;
 
   this.intervalHandler = setInterval(this.step.bind(this), 100);
 
@@ -24,8 +28,11 @@ View.prototype.bindKeys = function() {
 };
 
 View.prototype.handleKeyEvent = function(e) {
-  if (SNAKE_KEY[e.keyCode]) {
+  if (e.keyCode > 36 && e.keyCode < 41) {
     this.board.snake.turn(SNAKE_KEY[e.keyCode]);
+  } else if (e.keyCode === 13 && !this.inPlay) {
+    // enter to restart game
+    this.reset();
   }
 };
 
@@ -47,14 +54,32 @@ View.prototype.render = function() {
   this.updateClasses([this.board.apple.pos], 'apple');
 };
 
+View.prototype.reset = function() {
+  this.$modal.empty();
+  this.$modal.removeClass('modal');
+  this.board = new Board(20);
+  this.buildBoard();
+  this.inPlay = true;
+  this.intervalHandler = setInterval(this.step.bind(this), 100);
+};
+
 View.prototype.step = function() {
   if (this.board.snake.segments.length > 0) {
     this.board.snake.move();
     this.render();
   } else {
-    this.board.lose();
-    clearInterval(this.intervalHandler);
+    this.gameOver();
   }
+};
+
+View.prototype.gameOver = function() {
+  clearInterval(this.intervalHandler);
+  this.inPlay = false;
+
+  this.$modal.addClass('modal');
+  var modalHtml = '<div>Game Over<br><br> Press Enter to play again!</div>';
+  this.$modal.html(modalHtml);
+  this.$modal.find('div').addClass('modal-content');
 };
 
 View.prototype.updateClasses = function(coords, className) {

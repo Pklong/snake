@@ -6,7 +6,6 @@ var Apple = function (board) {
 Apple.prototype.replace = function () {
   var x = Math.floor(Math.random() * this.board.size);
   var y = Math.floor(Math.random() * this.board.size);
-
   while (this.board.snake.isOccupying([x, y])) {
     x = Math.floor(Math.random() * this.board.size);
     y = Math.floor(Math.random() * this.board.size);
@@ -24,10 +23,6 @@ var Board = function(size) {
 Board.prototype.validPosition = function(coord) {
   return (coord.x >= 0) && (coord.x < this.size) &&
          (coord.y >= 0) && (coord.y < this.size);
-};
-
-Board.prototype.lose = function() {
-  alert('you lost!');
 };
 
 var Coord = function(x, y) {

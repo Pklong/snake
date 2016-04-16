@@ -29,9 +29,11 @@
       this.each(function(node) {
         node.classList.add(className);
       });
+    return this;
     },
 
     append: function (children) {
+      debugger;
       if (this.nodes.length > 0) { return; }
 
       if (typeof children === 'object' &&
@@ -103,7 +105,6 @@
       }
     },
     filter: function(selector) {
-      // TODO build out more, works for Snake...
       var filterNodes = [];
       this.each(function (node) {
         if (node.matches(selector)) {

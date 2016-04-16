@@ -14,19 +14,20 @@ body {
   font-family: sans-serif;
   text-align: center;
   font-weight: bold;
+  background: #B2DFEE;
+  color: #35586C;
 }
 
 h1 {
   font-size: 60px;
   margin: 30px;
+  letter-spacing: 2px;
+  font-weight: 300;
 }
 
 figure {
   display: inline-block;
-  border: 10px solid black;
-}
-
-ul {
+  border: 10px solid #35586C;
 }
 
 ul:after {
@@ -42,9 +43,33 @@ li {
 }
 
 .apple {
-  background: red;
+  background: #f00;
 }
 
 .snake {
-  background: green;
+  background: #006400;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 40%;
+  width: 200px;
+  height: 100px;
+  padding: 50px;
+  transform: translateY(-50%);
+  background: #eee;
+  border-radius: 5px;
 }

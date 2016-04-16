@@ -48,7 +48,8 @@
 	
 	$w(function () {
 	  var rootEl = $w('.snake-game');
-	  new SnakeView(rootEl);
+	  var modal = $w('.game-over');
+	  new SnakeView(rootEl, modal);
 	});
 
 
@@ -59,19 +60,23 @@
 	var Board = __webpack_require__(2);
 	
 	var SNAKE_KEY = {
+	  //Arrow keys for direction
 	  38: "N",
 	  39: "E",
 	  37: "W",
-	  40: "S"
+	  40: "S",
 	};
 	
-	var View = function($el) {
+	var View = function($el, $modal) {
 	  this.board = new Board(20);
 	  this.$el = $el;
+	  this.$modal = $modal;
 	
 	  this.buildBoard();
 	  this.render();
 	  this.bindKeys();
+	
+	  this.inPlay = true;
 	
 	  this.intervalHandler = setInterval(this.step.bind(this), 100);
 	
@@ -82,8 +87,11 @@
 	};
 	
 	View.prototype.handleKeyEvent = function(e) {
-	  if (SNAKE_KEY[e.keyCode]) {
+	  if (e.keyCode > 36 && e.keyCode < 41) {
 	    this.board.snake.turn(SNAKE_KEY[e.keyCode]);
+	  } else if (e.keyCode === 13 && !this.inPlay) {
+	    // enter to restart game
+	    this.reset();
 	  }
 	};
 	
@@ -105,14 +113,32 @@
 	  this.updateClasses([this.board.apple.pos], 'apple');
 	};
 	
+	View.prototype.reset = function() {
+	  this.$modal.empty();
+	  this.$modal.removeClass('modal');
+	  this.board = new Board(20);
+	  this.buildBoard();
+	  this.inPlay = true;
+	  this.intervalHandler = setInterval(this.step.bind(this), 100);
+	};
+	
 	View.prototype.step = function() {
 	  if (this.board.snake.segments.length > 0) {
 	    this.board.snake.move();
 	    this.render();
 	  } else {
-	    this.board.lose();
-	    clearInterval(this.intervalHandler);
+	    this.gameOver();
 	  }
+	};
+	
+	View.prototype.gameOver = function() {
+	  clearInterval(this.intervalHandler);
+	  this.inPlay = false;
+	
+	  this.$modal.addClass('modal');
+	  var modalHtml = '<div>Game Over<br><br> Press Enter to play again!</div>';
+	  this.$modal.html(modalHtml);
+	  this.$modal.find('div').addClass('modal-content');
 	};
 	
 	View.prototype.updateClasses = function(coords, className) {
@@ -139,7 +165,6 @@
 	Apple.prototype.replace = function () {
 	  var x = Math.floor(Math.random() * this.board.size);
 	  var y = Math.floor(Math.random() * this.board.size);
-	
 	  while (this.board.snake.isOccupying([x, y])) {
 	    x = Math.floor(Math.random() * this.board.size);
 	    y = Math.floor(Math.random() * this.board.size);
@@ -157,10 +182,6 @@
 	Board.prototype.validPosition = function(coord) {
 	  return (coord.x >= 0) && (coord.x < this.size) &&
 	         (coord.y >= 0) && (coord.y < this.size);
-	};
-	
-	Board.prototype.lose = function() {
-	  alert('you lost!');
 	};
 	
 	var Coord = function(x, y) {

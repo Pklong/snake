@@ -2,5 +2,6 @@ var SnakeView = require('./snake-view');
 
 $w(function () {
   var rootEl = $w('.snake-game');
-  new SnakeView(rootEl);
+  var modal = $w('.game-over');
+  new SnakeView(rootEl, modal);
 });
