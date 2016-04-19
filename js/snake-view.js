@@ -18,7 +18,6 @@ var View = function($el, $modal) {
   this.bindKeys();
 
   this.inPlay = true;
-
   this.intervalHandler = setInterval(this.step.bind(this), 100);
 
 };
