@@ -52,7 +52,7 @@
 	  var weather = $w('.weather');
 	  $w.myAjax({
 	    method: 'GET',
-	    url: "http://api.openweathermap.org/data/2.5/weather?q=NY,NY&appid=5640e698aff958942e90889147e705e7",
+	    url: "https://api.openweathermap.org/data/2.5/weather?q=NY,NY&appid=5640e698aff958942e90889147e705e7",
 	    success: function(weatherData) {
 	      var parsedWeather = JSON.parse(weatherData);
 	      var temp = Math.floor(parsedWeather.main.temp * 1.8 - 459.67).toString();
